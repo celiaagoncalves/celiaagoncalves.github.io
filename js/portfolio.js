@@ -681,30 +681,6 @@ function renderPostShare(post) {
     </button>
   `;
 
-  const instagramBtn = document.getElementById('postShareInstagram');
-  if (instagramBtn) {
-    instagramBtn.addEventListener('click', async () => {
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(canonical);
-        } else {
-          window.prompt(labels.instagram + ':', canonical);
-        }
-        showToast(T[lang]['post.toast.copied']);
-        instagramBtn.classList.add('copied');
-        instagramBtn.setAttribute('aria-label', labels.copied);
-        instagramBtn.setAttribute('title', labels.copied);
-        setTimeout(() => {
-          instagramBtn.classList.remove('copied');
-          instagramBtn.setAttribute('aria-label', labels.instagram);
-          instagramBtn.setAttribute('title', labels.instagramHint);
-        }, 1800);
-      } catch {
-        window.prompt(labels.instagram + ':', canonical);
-      }
-    });
-  }
-
   // On touch devices with the Web Share API, route every social link
   // through the native share sheet. The OS knows which apps are installed
   // and opens the right one (LinkedIn icon → LinkedIn app, etc.) — far
@@ -729,6 +705,47 @@ function renderPostShare(post) {
           // User cancelled the share sheet — no-op.
         }
       });
+    });
+  }
+
+  const instagramBtn = document.getElementById('postShareInstagram');
+  if (instagramBtn) {
+    instagramBtn.addEventListener('click', async () => {
+      // Mobile: open the native share sheet so the user can pick Instagram
+      // (Stories / Direct). Instagram has no web share URL — posting to the
+      // feed from outside the app isn't possible on any platform.
+      if (useWebShare) {
+        try {
+          await navigator.share({
+            title: post.title,
+            text: post.summary || defaultSummary(),
+            url: canonical,
+          });
+          return;
+        } catch {
+          // User cancelled — fall through to copy-link as a safety net.
+        }
+      }
+
+      // Desktop (no Web Share): copy the link + toast + button feedback.
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(canonical);
+        } else {
+          window.prompt(labels.instagram + ':', canonical);
+        }
+        showToast(T[lang]['post.toast.copied']);
+        instagramBtn.classList.add('copied');
+        instagramBtn.setAttribute('aria-label', labels.copied);
+        instagramBtn.setAttribute('title', labels.copied);
+        setTimeout(() => {
+          instagramBtn.classList.remove('copied');
+          instagramBtn.setAttribute('aria-label', labels.instagram);
+          instagramBtn.setAttribute('title', labels.instagramHint);
+        }, 1800);
+      } catch {
+        window.prompt(labels.instagram + ':', canonical);
+      }
     });
   }
 }
