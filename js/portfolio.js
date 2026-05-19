@@ -705,25 +705,30 @@ function renderPostShare(post) {
     });
   }
 
-  // Facebook's sharer.php is unreliable on mobile (often forces login or
-  // silently fails inside the FB in-app browser). Where the Web Share API
-  // is available, intercept the click and open the native share sheet —
-  // the user can pick Facebook (or anything else) from there. On desktop
-  // browsers without navigator.share the original sharer.php URL still
-  // works, so the anchor's href is kept as the fallback.
-  const facebookLink = shareLinksEl.querySelector('[data-share="facebook"]');
-  if (facebookLink && typeof navigator.share === 'function') {
-    facebookLink.addEventListener('click', async (event) => {
-      event.preventDefault();
-      try {
-        await navigator.share({
-          title: post.title,
-          text: post.summary || defaultSummary(),
-          url: canonical,
-        });
-      } catch {
-        // User cancelled the share sheet — no-op.
-      }
+  // On touch devices with the Web Share API, route every social link
+  // through the native share sheet. The OS knows which apps are installed
+  // and opens the right one (LinkedIn icon → LinkedIn app, etc.) — far
+  // more reliable than provider-specific URLs, which on mobile often open
+  // the browser and silently fail to deep-link into the app. Desktop is
+  // left alone: each provider's web share URL works fine there.
+  const useWebShare =
+    typeof navigator.share === 'function' &&
+    window.matchMedia('(pointer: coarse)').matches;
+
+  if (useWebShare) {
+    shareLinksEl.querySelectorAll('a.post__share-link').forEach((link) => {
+      link.addEventListener('click', async (event) => {
+        event.preventDefault();
+        try {
+          await navigator.share({
+            title: post.title,
+            text: post.summary || defaultSummary(),
+            url: canonical,
+          });
+        } catch {
+          // User cancelled the share sheet — no-op.
+        }
+      });
     });
   }
 }
