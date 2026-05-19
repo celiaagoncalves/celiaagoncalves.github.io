@@ -722,8 +722,10 @@ function renderPostShare(post) {
             url: canonical,
           });
           return;
-        } catch {
-          // User cancelled — fall through to copy-link as a safety net.
+        } catch (err) {
+          // User dismissed the sheet — respect that, don't silently copy.
+          if (err && err.name === 'AbortError') return;
+          // Any other failure (rare): fall through to copy as a safety net.
         }
       }
 
