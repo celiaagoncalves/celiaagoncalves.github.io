@@ -14,10 +14,10 @@ This blog comes to life as a space to share reflections, learnings, and perspect
 
 Over time, I plan to write about:
 
-- **Product Ownership in Defense contexts** — the specific challenges of managing product in mission-critical systems
-- **Quality and compliance** — frameworks, certifications, and good practices in QA
-- **Agile in regulated environments** — how to adapt agile methodologies to projects with strict compliance requirements
-- **Technical leadership** — lessons from leading testing teams and working at the interface between business and technology
+- **Product Ownership in Defense contexts** - the specific challenges of managing product in mission-critical systems
+- **Quality and compliance** - frameworks, certifications, and good practices in QA
+- **Agile in regulated environments** - how to adapt agile methodologies to projects with strict compliance requirements
+- **Technical leadership** - lessons from leading testing teams and working at the interface between business and technology
 
 Writing about the work I do is also a way to consolidate knowledge and contribute to the professional community.
 

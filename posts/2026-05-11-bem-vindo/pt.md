@@ -14,10 +14,10 @@ Este blog nasce como um espaço para partilhar reflexões, aprendizagens e persp
 
 Ao longo do tempo, pretendo escrever sobre:
 
-- **Product Ownership em contexto de Defesa** — os desafios específicos de gerir produto em sistemas de missão crítica
-- **Qualidade e conformidade** — frameworks, certificações e boas práticas de QA
-- **Agile em ambientes regulados** — como adaptar metodologias ágeis a projectos com requisitos rigorosos
-- **Liderança técnica** — aprendizagens de quem lidera equipas e trabalha na interface entre negócio e tecnologia
+- **Product Ownership em contexto de Defesa** - os desafios específicos de gerir produto em sistemas de missão crítica
+- **Qualidade e conformidade** - frameworks, certificações e boas práticas de QA
+- **Agile em ambientes regulados** - como adaptar metodologias ágeis a projectos com requisitos rigorosos
+- **Liderança técnica** - aprendizagens de quem lidera equipas e trabalha na interface entre negócio e tecnologia
 
 Escrever sobre o trabalho que faço é também uma forma de consolidar o conhecimento e contribuir para a comunidade profissional.
 

@@ -376,13 +376,15 @@ const skillObserver = new IntersectionObserver((entries) => {
 fills.forEach(f => skillObserver.observe(f));
 
 /* ============================================================
-   Blog — GitHub API + marked.js
+   Blog — manifest-driven listing + lazy marked.js
    ============================================================ */
-// One recursive tree call lists every blob in the repo. We filter to
-// posts/{slug}/{en,pt}.md. With one API call regardless of post count,
-// the anonymous rate limit (60/h) is never a concern.
-const REPO_TREE_API = 'https://api.github.com/repos/celiaagoncalves/celiaagoncalves.github.io/git/trees/master?recursive=1';
-const POSTS_RAW = 'https://raw.githubusercontent.com/celiaagoncalves/celiaagoncalves.github.io/master/posts';
+// The listing reads a build-time manifest (`/p/_posts.json`) produced by
+// `scripts/prerender-posts.mjs`. Post bodies are fetched root-relative
+// from `/posts/{slug}/{lang}.md` — that path works locally (Live Server
+// serves the project root) and on production (GitHub Pages deploys the
+// whole tree, including `/posts/`).
+const POSTS_INDEX = '/p/_posts.json';
+const POSTS_PATH = '/posts';
 
 function parsePost(text, filename) {
     const slug = filename.replace(/\.md$/, '');
@@ -434,21 +436,24 @@ function renderBlogGrid(grid) {
     </a>`).join('');
 }
 
-async function renderListingFromGroups(grid) {
+function renderListingFromGroups(grid) {
   const slugs = Object.keys(window.__postGroups).sort().reverse();
   if (!slugs.length) {
     grid.innerHTML = `<p class="blog__empty">${T[lang]['blog.empty']}</p>`;
     return;
   }
-  window.__posts = await Promise.all(slugs.map(async slug => {
+  window.__posts = slugs.map(slug => {
     const group = window.__postGroups[slug];
     const file = group[lang] || group.pt || group.en;
-    const text = await fetch(file.download_url).then(r => r.text());
-    const post = parsePost(text, file.name);
-    post.baseSlug = slug;
-    post.locale   = file.locale;
-    return post;
-  }));
+    return {
+      baseSlug: slug,
+      slug,
+      locale: file.locale,
+      title: file.title,
+      date: file.date,
+      summary: file.summary,
+    };
+  });
   renderBlogGrid(grid);
 }
 
@@ -456,29 +461,21 @@ async function loadBlogListing() {
   const grid = document.getElementById('blogGrid');
   if (!grid) return;
   try {
-    const res = await fetch(REPO_TREE_API, { headers: { Accept: 'application/vnd.github.v3+json' } });
+    const res = await fetch(POSTS_INDEX, { cache: 'no-cache' });
     if (!res.ok) { grid.innerHTML = ''; return; }
     const data = await res.json();
 
-    // posts/{slug}/{en,pt}.md — folders starting with `_` (e.g. _template) are ignored.
     const groups = {};
-    (data.tree || []).forEach(entry => {
-      if (entry.type !== 'blob') return;
-      const m = entry.path.match(/^posts\/([^/]+)\/(en|pt)\.md$/);
-      if (!m) return;
-      const slug = m[1];
-      if (slug.startsWith('_')) return;
-      const locale = m[2];
-      groups[slug] = groups[slug] || {};
-      groups[slug][locale] = {
-        name: `${locale}.md`,
-        locale,
-        download_url: `${POSTS_RAW}/${slug}/${locale}.md`,
-      };
+    (data.posts || []).forEach(p => {
+      if (!p || !p.slug) return;
+      groups[p.slug] = {};
+      Object.entries(p.locales || {}).forEach(([locale, meta]) => {
+        groups[p.slug][locale] = { locale, ...meta };
+      });
     });
 
     window.__postGroups = groups;
-    await renderListingFromGroups(grid);
+    renderListingFromGroups(grid);
   } catch {
     if (grid) grid.innerHTML = '';
   }
@@ -486,7 +483,7 @@ async function loadBlogListing() {
 
 async function tryFetchPost(slug, locale) {
   try {
-    const res = await fetch(`${POSTS_RAW}/${encodeURIComponent(slug)}/${locale}.md`);
+    const res = await fetch(`${POSTS_PATH}/${encodeURIComponent(slug)}/${locale}.md`);
     if (!res.ok) return null;
     const post = parsePost(await res.text(), `${locale}.md`);
     post.baseSlug = slug;
