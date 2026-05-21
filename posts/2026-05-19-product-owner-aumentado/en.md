@@ -1,16 +1,13 @@
------
-
+---
 title: The Augmented Product Owner: Welcome to the AI Era
 date: 2026-05-21
 summary: How AI is reshaping the Product Owner role - from new strategic postures and context engineering to ethics and sustainability.
 tags:
-
 - Product Ownership
 - AI
 - Leadership
 - Ethics
-
------
+---
 
 The first time I used AI to draft a user story, I thought: this saves me 20 minutes. The tenth time, I realised something bigger was happening — my role was shifting. AI isn’t just an automation tool for Product Owners. It’s a strategic partner that amplifies decision-making and forces us to think at a higher level.
 
