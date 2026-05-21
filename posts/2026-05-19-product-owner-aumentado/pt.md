@@ -7,7 +7,7 @@ tags:
 - AI
 - Leadership
 - Ethics
------
+---
 
 A primeira vez que usei IA para rascunhar uma user story pensei: isto poupa-me 20 minutos. À décima vez percebi que estava a acontecer algo maior - o meu papel estava a mudar. A IA não é apenas uma ferramenta de automação para o Product Owner. É um parceiro estratégico que amplifica a tomada de decisão e nos obriga a pensar a um nível superior.
 
