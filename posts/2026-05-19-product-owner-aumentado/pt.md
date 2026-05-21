@@ -15,7 +15,7 @@ A primeira vez que usei IA para rascunhar uma user story pensei: isto poupa-me 2
 
 A integração da IA transforma as responsabilidades tradicionais e permite que o PO se foque no que realmente importa: a estratégia e o valor.
 
-- **O Visionário** : utiliza a IA para estruturar narrativas que alinham os stakeholders em torno de uma direção clara. O framework 3x3 - três objetivos, três métricas, três riscos — ajuda a construir essas narrativas de forma rápida e coerente.
+- **O Visionário** : utiliza a IA para estruturar narrativas que alinham os stakeholders em torno de uma direção clara. O framework 3x3 - três objetivos, três métricas, três riscos - ajuda a construir essas narrativas de forma rápida e coerente.
 - **O Experimentador** : a IA permite criar protótipos de baixa fidelidade e mock-ups em minutos, acelerando a validação de hipóteses antes de escrever uma única linha de código.
 - **O Orquestrador** (postura nova) : delega à IA tarefas rotineiras: em vez de passar 30 minutos a escrever o resumo da sprint review, o PO revê e valida o que a IA gerou em 5. Isto liberta tempo para trabalho de alto impacto.
 - **O Representante do Cliente** : a IA ajuda a rascunhar personas e a mapear valores, mas estas são hipóteses, não verdades. Devem ser sempre validadas com humanos reais.
